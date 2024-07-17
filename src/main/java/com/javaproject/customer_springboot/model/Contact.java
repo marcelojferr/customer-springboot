@@ -1,7 +1,6 @@
 package com.javaproject.customer_springboot.model;
 
 import java.io.Serializable;
-import java.util.Set;
 import org.springframework.beans.BeanUtils;
 import com.javaproject.customer_springboot.dto.ContactDTO;
 import jakarta.persistence.Column;
@@ -27,7 +26,7 @@ public class Contact implements Serializable {
 
 	private static final long serialVersionUID = 3188785005158006826L;
 
-	public Contact(Set<ContactDTO> contactDTO) {
+	public Contact(ContactDTO contactDTO) {
 		BeanUtils.copyProperties(contactDTO, this);
 	}
 

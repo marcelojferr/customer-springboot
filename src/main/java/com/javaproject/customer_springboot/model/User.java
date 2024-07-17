@@ -2,6 +2,7 @@ package com.javaproject.customer_springboot.model;
 
 import java.io.Serializable;
 import org.springframework.beans.BeanUtils;
+
 import com.javaproject.customer_springboot.dto.UserDTO;
 import com.javaproject.customer_springboot.enums.UserStatus;
 import jakarta.persistence.Column;
@@ -28,8 +29,10 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = -356595128487711727L;
 
-	@Builder
+//	protected PasswordEncoder passwordEncoder;
+	
 	public User(UserDTO userDTO) {
+//		userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		BeanUtils.copyProperties(userDTO, this);
 	}
 	

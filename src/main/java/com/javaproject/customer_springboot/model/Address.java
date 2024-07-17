@@ -1,10 +1,8 @@
 package com.javaproject.customer_springboot.model;
+
 import java.io.Serializable;
-
 import org.springframework.beans.BeanUtils;
-
 import com.javaproject.customer_springboot.dto.AddressDTO;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -14,7 +14,6 @@ ConstraintValidator<AddressValidation, AddressDTO> {
 	    ConstraintValidatorContext cxt) {
 	      return addressField.getStreetAddress() != null && 
 			  addressField.getNumberAddress() != null && 
-			  addressField.getCustomerNumber() != null &&  
 			  addressField.getDistrictAddress() != null && 
 			  addressField.getCityAddress() != null && 
 			  addressField.getStateAddress() != null && 

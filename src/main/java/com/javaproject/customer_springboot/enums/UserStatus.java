@@ -1,13 +1,52 @@
 package com.javaproject.customer_springboot.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import lombok.Generated;
+
+@Generated
 public enum UserStatus {
 
-    ATIVO("Ativo"),
-    INATIVO("Inativo");
+	ATIVO ("A","Ativo"),
+	INATIVO ("I", "Inativo"),
+	PENDENTE ("P", "Pendente");
+	
+	private String codigo;
+	private String descricao;
+	
+	private UserStatus(String codigo, String descricao) {
+		this.codigo = codigo;
+		this.descricao = descricao;
+	}
 
-    private String userStatus;
+	@JsonValue
+	public String getCodigo() {
+		return codigo;
+	}
 
-    private UserStatus(String userStatus) {
-        this.userStatus = userStatus;
-    }
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	
+	@JsonCreator
+	public static UserStatus codeValue(String codigo) {
+		if(codigo.equals("A")) {
+			return ATIVO;
+		}else if(codigo.equals("I")) {
+			return INATIVO;
+		}else if(codigo.equals("P")) {
+			return PENDENTE;
+		}else {
+			return null;
+		}
+	}
 }

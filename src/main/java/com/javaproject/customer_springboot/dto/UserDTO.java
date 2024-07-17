@@ -2,11 +2,10 @@ package com.javaproject.customer_springboot.dto;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.javaproject.customer_springboot.enums.UserStatus;
 import com.javaproject.customer_springboot.model.User;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -38,17 +37,22 @@ public class UserDTO {
 
     @NotBlank(message = "Campo userName é obrigatório")
 	@JsonProperty("userName")
-	private Long userName;
+	private String userName;
 
-    @NotBlank(message = "Campo email é obrigatório")
-	@JsonProperty("email")
-	private String email;
+    @NotBlank(message = "Campo userEmail é obrigatório")
+	@JsonProperty("userEmail")
+	private String userEmail;
+	
+    @NotBlank(message = "Campo userStatus é obrigatório")
+	@JsonProperty("userStatus")
+	private UserStatus userStatus;
 	
     @Override
     public String toString() {
         return "User [id=" + id 
         		+ ", userLogin=" + userLogin
         		+ ", userName=" + userName 
-        		+ ", email=" + email + "]";
+        		+ ", userEmail=" + userEmail 
+        		+ ", userStatus=" + userStatus + "]";
     }
 }

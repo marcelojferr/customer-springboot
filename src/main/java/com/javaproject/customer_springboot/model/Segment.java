@@ -1,7 +1,7 @@
 package com.javaproject.customer_springboot.model;
 
-import java.util.List;
-
+import org.springframework.beans.BeanUtils;
+import com.javaproject.customer_springboot.dto.SegmentDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,8 +16,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "SEGMENTO_CLIENTE")
 public class Segment {
 
+	public Segment(SegmentDTO segmentDTO) {
+		BeanUtils.copyProperties(segmentDTO, this);
+	}
+	
 	@Id
-	private List<Long> id;
+	private Long id;
 	
 	@Column(name = "DESCRICAO_SEGMENTO")
 	private String segmentDescription;

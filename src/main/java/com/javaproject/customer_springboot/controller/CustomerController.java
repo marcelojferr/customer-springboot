@@ -32,35 +32,20 @@ public class CustomerController {
     	log.info("List All customer");
     	return ResponseEntity.ok(customerService.listCustomer());
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CustomerDTO> findCustomer(@PathVariable("id") Long id) {
-    	log.info("Search customer by ID");
-    	return ResponseEntity.ok(customerService.findCustomer(id));
-    }
-
-    @GetMapping("name/{customerName}")
-    public ResponseEntity<CustomerDTO> findCustomerName(
-    		@PathVariable("customerName") String customerName) throws CustomerException {
-    	log.info("Search customer by Name");
-    	return ResponseEntity.ok(customerService.findCustomerName(customerName));
-    }
-
-    @GetMapping("number/{customerNumber}")
-    public ResponseEntity<CustomerDTO> findCustomerNumber(
-    		@PathVariable("customerNumber") String customerNumber) throws CustomerException {
-    	log.info("Search customer by Number");
-    	return ResponseEntity.ok(customerService.findCustomerNumber(customerNumber));
-    }
-
-    @GetMapping("fantasy/{fantasyName}")
-    public ResponseEntity<CustomerDTO> findCustomerFantasyName(
-    		@PathVariable("fantasyName") String fantasyName) throws CustomerException {
-    	log.info("Search customer by Fantasy Name");
-    	return ResponseEntity.ok(customerService.findCustomerFantasyName(fantasyName));
+    
+    @GetMapping("/active")
+    public ResponseEntity<List<CustomerDTO>> listActiveCustomer(){
+    	log.info("List Active customer");
+    	return ResponseEntity.ok(customerService.listActiveCustomer());
     }
     
-    @GetMapping("/pageable-all")
+    @GetMapping("/inactive")
+    public ResponseEntity<List<CustomerDTO>> listInactiveCustomer(){
+    	log.info("List Inactive customer");
+    	return ResponseEntity.ok(customerService.listInactiveCustomer());
+    }
+
+    @GetMapping("/pageable")
     public ResponseEntity<Page<CustomerDTO>> listCustomerPageable(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
@@ -77,22 +62,49 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.listCustomerByStatusPageable(status, page, size));
     }
     
-    @PostMapping
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerDTO> findCustomer(@PathVariable("id") Long id) {
+    	log.info("Search customer by ID");
+    	return ResponseEntity.ok(customerService.findCustomer(id));
+    }
+
+    @GetMapping("/name/{customerName}")
+    public ResponseEntity<CustomerDTO> findCustomerName(
+    		@PathVariable("customerName") String customerName) throws CustomerException {
+    	log.info("Search customer by Name");
+    	return ResponseEntity.ok(customerService.findCustomerName(customerName));
+    }
+
+    @GetMapping("/number/{customerNumber}")
+    public ResponseEntity<CustomerDTO> findCustomerNumber(
+    		@PathVariable("customerNumber") String customerNumber) throws CustomerException {
+    	log.info("Search customer by Number");
+    	return ResponseEntity.ok(customerService.findCustomerNumber(customerNumber));
+    }
+
+    @GetMapping("/fantasy/{fantasyName}")
+    public ResponseEntity<CustomerDTO> findCustomerFantasyName(
+    		@PathVariable("fantasyName") String fantasyName) throws CustomerException {
+    	log.info("Search customer by Fantasy Name");
+    	return ResponseEntity.ok(customerService.findCustomerFantasyName(fantasyName));
+    }
+    
+    @PostMapping("/add")
     public ResponseEntity<CustomerDTO> saveCustomer(@Valid @RequestBody CustomerDTO customerDTO) throws CustomerException{
     	log.info("Create customer");
     	return ResponseEntity.ok(customerService.createCustomer(customerDTO));
     }
     
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<CustomerDTO> updateCustomer(@Valid @RequestBody CustomerDTO customerDTO){
     	log.info("Update customer");
     	return ResponseEntity.ok(customerService.updateCustomer(customerDTO));
     }
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable("id") Long id){
     	log.info("Delete customer");
     	customerService.deleteCustomer(id);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
     }
 }

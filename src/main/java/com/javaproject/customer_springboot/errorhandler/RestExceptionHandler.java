@@ -63,7 +63,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorDTO> IllegalArgumentException(IllegalArgumentException  illegalArgumentException ) {
+    public ResponseEntity<ErrorDTO> handleIllegalArgumentException(IllegalArgumentException  illegalArgumentException ) {
     	log.error("Illegal argument error");
         return new ResponseEntity<>(
         		ErrorDTO.builder()
@@ -77,7 +77,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(DataAccessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorDTO> dataAccessException(DataAccessException  dataAccessException ) {
+    public ResponseEntity<ErrorDTO> handleDataAccessException(DataAccessException  dataAccessException ) {
     	log.error("Data access error");
         return new ResponseEntity<>(
         		ErrorDTO.builder()

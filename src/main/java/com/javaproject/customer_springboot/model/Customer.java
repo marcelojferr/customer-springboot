@@ -3,11 +3,17 @@ package com.javaproject.customer_springboot.model;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
-import com.javaproject.customer_springboot.dto.CustomerDTO;
-import com.javaproject.customer_springboot.enums.CustomerStatus;
+import org.springframework.beans.BeansException;
 
+import com.javaproject.customer_springboot.dto.AddressDTO;
+import com.javaproject.customer_springboot.dto.ContactDTO;
+import com.javaproject.customer_springboot.dto.CustomerDTO;
+import com.javaproject.customer_springboot.dto.SegmentDTO;
+import com.javaproject.customer_springboot.enums.CustomerStatus;
+import com.javaproject.customer_springboot.exception.UserException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,11 +43,17 @@ public class Customer implements Serializable {
 
 	private static final long serialVersionUID = 4933790906258654972L;
 
-	@Builder
 	public Customer(CustomerDTO customerDTO) {
-		BeanUtils.copyProperties(customerDTO, this);
-//		this.customerAdress = new Address(customerDTO.getCustomerAdress());
-//		this.customerContact = new Contact(customerDTO.getCustomerContact());
+		try {
+			BeanUtils.copyProperties(customerDTO, this);
+			this.address = new Address(customerDTO.getAddress());
+			this.segment = new Segment(customerDTO.getSegment());
+			this.contact.addAll(customerDTO.getContact().stream()
+				.map(contact -> new Contact(contact)).collect(Collectors.toSet()));
+		}
+		catch(BeansException e) {
+			new UserException("Erro ao carregar dados do usuário");
+		}
 	}
 	
 	@Id
@@ -61,7 +73,7 @@ public class Customer implements Serializable {
 	@JoinColumn(name = "SEGMENTO_CLIENTE_id", nullable = false)
 	private Segment segment;
 	
-	@OneToOne(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
+	@OneToOne(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Address address;
 	
 	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -2,14 +2,17 @@ package com.javaproject.customer_springboot.dto;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.javaproject.customer_springboot.enums.CustomerStatus;
+import com.javaproject.customer_springboot.exception.UserException;
 import com.javaproject.customer_springboot.model.Customer;
-import com.javaproject.customer_springboot.model.Segment;
 import com.javaproject.customer_springboot.validations.AddressValidation;
 import com.javaproject.customer_springboot.validations.ContactValidation;
 import jakarta.validation.constraints.NotBlank;
@@ -23,14 +26,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerDTO {
 	
-	@Builder
 	public CustomerDTO(Customer customer) {
-		BeanUtils.copyProperties(customer, this);
+		try {
+			BeanUtils.copyProperties(customer, this);
+			this.address = new AddressDTO(customer.getAddress());
+			this.segment = new SegmentDTO(customer.getSegment());
+			this.contact.addAll(customer.getContact().stream()
+				.map(contact -> new ContactDTO(contact)).collect(Collectors.toSet()));
+		}
+		catch(BeansException e) {
+			new UserException("Erro ao carregar dados do usuário");
+		}
 	}
 
-	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Long id;
 	
     @NotBlank(message = "Campo customerName é obrigatório")
@@ -48,14 +59,14 @@ public class CustomerDTO {
 
     @NotBlank(message = "Campo customerSegment é obrigatório")
 	@JsonProperty("customerSegment")
-	private Segment customerSegment;
+	private SegmentDTO segment;
 	
     @AddressValidation(message = "O endereço do cliente é obrigatório")
 	@JsonProperty("customerAdress")
 	private AddressDTO address;
 	
     @ContactValidation
-	@JsonProperty("customerContact")
+	@JsonProperty("contact")
 	private Set<ContactDTO> contact = new HashSet<>();
 	
     @NotBlank(message = "Campo customerStatus é obrigatório")
@@ -68,7 +79,7 @@ public class CustomerDTO {
         		+ ", customerName=" + customerName
         		+ ", customerFantasyName=" + customerFantasyName 
         		+ ", customerNumber=" + customerNumber
-        		+ ", customerSegment=" + customerSegment 
+        		+ ", customerSegment=" + segment 
         		+ ", customerAdress=" + address
         		+ ", customerContact=" + contact 
         		+ ", customerStatus=" + customerStatus + "]";
